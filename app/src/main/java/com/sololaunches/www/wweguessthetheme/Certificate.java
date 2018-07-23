@@ -1,10 +1,12 @@
 package com.sololaunches.www.wweguessthetheme;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -52,6 +54,9 @@ public class Certificate extends AppCompatActivity {
         TextView score = (TextView)findViewById(R.id.score);
         TextView playerName = (TextView)findViewById(R.id.player);
         ImageButton nxt_btn  = (ImageButton)findViewById(R.id.nxt);
+        ImageButton rate  = (ImageButton)findViewById(R.id.rate);
+
+
         score.setText("Score :"+points+ " points");
         playerName.setText(" "+player);
 
@@ -61,6 +66,20 @@ public class Certificate extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        rate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getApplicationContext().getPackageName())));
+                    Log.d("checck ", "onClick: " + "market://details?id=" + getApplicationContext().getPackageName());
+                } catch (Exception e1) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "you are unable to open the link", Toast.LENGTH_LONG);
+                    toast.show();
+
+                }
             }
         });
 

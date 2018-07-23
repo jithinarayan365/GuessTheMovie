@@ -16,6 +16,15 @@ public class WweMainBean {
     private String hintStatus;
     private String adStatus;
     private String display;
+    private String trivia;
+
+    public String getTrivia() {
+        return trivia;
+    }
+
+    public void setTrivia(String trivia) {
+        this.trivia = trivia;
+    }
 
     public String getAlias() {
         return alias;

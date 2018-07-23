@@ -19,13 +19,13 @@
 
     <ImageButton
         android:id="@+id/ok"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/rounded_corners_imagebutton"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="26dp"
-        app:srcCompat="@drawable/ok" />
+        android:background="@drawable/rounded_corners_imagebutton"
+        app:srcCompat="@drawable/check" />
 
     <TextView
         android:id="@+id/answer"

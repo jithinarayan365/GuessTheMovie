@@ -24,7 +24,8 @@ import com.startapp.android.publish.adsCommon.VideoListener;
 
 import java.lang.ref.WeakReference;
 
-public class CongratuationsActivity extends AppCompatActivity {
+public class
+CongratuationsActivity extends AppCompatActivity {
 
     RelativeLayout layout;
     boolean flag, one, two, three;
@@ -36,6 +37,15 @@ public class CongratuationsActivity extends AppCompatActivity {
     String PACKAGE_NAME;
     private WeakReference<Context> mContext;
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // insert here your instructions
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
