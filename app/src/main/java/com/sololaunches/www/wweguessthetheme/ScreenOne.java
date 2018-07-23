@@ -103,6 +103,9 @@ public class ScreenOne extends AppCompatActivity {
     }
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,20 +136,6 @@ public class ScreenOne extends AppCompatActivity {
 
         while (cur2.moveToNext()) {
             String status = cur2.getString(8);
-
-            Log.d("CHECK 0", "onCreate: "+cur2.getString(0));
-            Log.d("CHECK 1", "onCreate: "+cur2.getString(1));
-
-            Log.d("CHECK 2", "onCreate: "+cur2.getString(2));
-            Log.d("CHECK 3", "onCreate: "+cur2.getString(3));
-            Log.d("CHECK 4", "onCreate: "+cur2.getString(4));
-            Log.d("CHECK 5", "onCreate: "+cur2.getString(5));
-            Log.d("CHECK 6", "onCreate: "+cur2.getString(6));
-            Log.d("CHECK 7", "onCreate: "+cur2.getString(7));
-            Log.d("CHECK 8", "onCreate: "+cur2.getString(8));
-            Log.d("CHECK 9", "onCreate: "+cur2.getString(9));
-
-
 
             if ("N".equals(status) && !firstSignal) {
                 beanUnsolved.setPosition(cur2.getString(0));
@@ -328,7 +317,6 @@ public class ScreenOne extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                Log.d("INSIDE resolve", "onClick: ");
                 if (coins < 50) {
                     Snackbar mySnackbar = Snackbar.make(v, "You dont have enough Coins, Click on add Coins to add few coins", 2000);
                     mySnackbar.show();
@@ -374,7 +362,6 @@ public class ScreenOne extends AppCompatActivity {
                     Snackbar mySnackbar = Snackbar.make(v, mainBean.getHint(), 10000);
                     mySnackbar.show();
                 }
-                Log.d("check player AFTER", "COINS: " + playerStatsBean.getCoins() + " POINTS " + playerStatsBean.getPoints());
 
             }
         });
@@ -425,6 +412,8 @@ public class ScreenOne extends AppCompatActivity {
                         pause.setVisibility(View.INVISIBLE);
                         check.setVisibility(View.INVISIBLE);
                         seekbar.setVisibility(View.INVISIBLE);
+                        hints.setVisibility(View.INVISIBLE);
+                        resolve.setVisibility(View.INVISIBLE);
                         Snackbar mySnackbar = Snackbar.make(v, "Congratulations, Correct answer", 5000);
                         mySnackbar.show();
                         trivia.setVisibility(View.VISIBLE);
@@ -442,7 +431,6 @@ public class ScreenOne extends AppCompatActivity {
 
                         int coins = Integer.parseInt(playerStatsBean.getCoins()) + 5;
                         int points = Integer.parseInt(playerStatsBean.getPoints()) + 100;
-                        Log.d("Resolved score", "onClick: " + coins + "--" + points);
                         playerStatsBean.setPoints(String.valueOf(points));
                         playerStatsBean.setCoins(String.valueOf(coins));
                         wweDBAdapter.updateStateUp(playerStatsBean, beanUnsolved.getPlayer());
@@ -454,10 +442,8 @@ public class ScreenOne extends AppCompatActivity {
                             public void run() {
                                 // startActivity(new Intent(getApplicationContext(), CongratuationsActivity.class)
                                 //);
-                                Log.d("AD FINALS ", "run: " + beanUnsolved.getAdStatus());
 
                                 if (beanUnsolved.getAdStatus().equals("F")) {
-                                    Log.d("ADEnters ", "run: " + interstitial + videoAd);
 
                                     wweDBAdapter.updateFinishGame(playerStatsBean.getPlayer());
                                     Intent intent1 = new Intent(getApplicationContext(), Certificate.class);
@@ -466,7 +452,6 @@ public class ScreenOne extends AppCompatActivity {
                                     startActivity(intent1);
                                     finish();
                                 } else {
-                                    Log.d("AD STATUS", "run: " + interstitial + videoAd);
                                     if (interstitial) {
                                         startAppAdInst.showAd();
                                     } else if (videoAd) {
@@ -550,6 +535,8 @@ public class ScreenOne extends AppCompatActivity {
 
     }
 
+
+
     public class DisplayAd extends AsyncTask<String, String, String> {
 
 
@@ -572,7 +559,6 @@ public class ScreenOne extends AppCompatActivity {
 
             } catch (Exception e) {
 
-                Log.e("Error on JSON Parsing", "onPostExecute: " + e);
             }
 
         }

@@ -81,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/nxt_btn"
+        android:layout_centerVertical="true"
         android:paddingTop="15dp"
         android:text="Congratulations!!"
         android:textAlignment="center"
@@ -92,16 +92,15 @@
     <ImageButton
         android:id="@+id/nxt_btn"
         android:layout_width="120dp"
-        android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="120dp"
+        android:layout_height="27dp"
+        android:layout_below="@+id/congrats"
+        android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/next_btn" />
 
 
     <ImageButton
         android:id="@+id/share"
-        android:layout_width="80dp"
+        android:layout_width="100dp"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -128,8 +127,9 @@
         android:id="@+id/trivia"
         android:layout_width="349dp"
         android:layout_height="85dp"
-        android:layout_alignBottom="@+id/play"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="111dp"
         android:ems="10"
         android:inputType="textMultiLine"
         android:text="He is one of the best players in the country other than that we dont have much to say because hes a big womaniser"
