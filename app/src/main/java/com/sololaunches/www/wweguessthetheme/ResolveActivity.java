@@ -22,7 +22,7 @@ public class ResolveActivity extends AppCompatActivity {
     WweConvenience wweConvenience;
     PlayerStatsBean playerStatsBean;
     MediaPlayer mediaPlayer;
-
+    TextView trivia;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +34,16 @@ public class ResolveActivity extends AppCompatActivity {
         final String display = (String) getIntent().getSerializableExtra("player");
         final String image = (String) getIntent().getSerializableExtra("image");
         final String  finalstat = (String) getIntent().getSerializableExtra("finalstat");
+        final String  triviaGot = (String) getIntent().getSerializableExtra("trivia");
+
+        trivia = (TextView) findViewById(R.id.trivia);
+
         PACKAGE_NAME = getApplicationContext().getPackageName();
         tv = (TextView) findViewById(R.id.answer);
         coinsTxt = (TextView) findViewById(R.id.coins);
 
         tv.setText(image);
+        trivia.setText(triviaGot);
         imageButton = (ImageButton) findViewById(R.id.ok);
         ImageView superstar = (ImageView) findViewById(R.id.super_star);
         int imgId = getResources().getIdentifier(PACKAGE_NAME + ":drawable/" + image, null, null);

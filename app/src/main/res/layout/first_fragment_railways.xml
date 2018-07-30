@@ -10,12 +10,12 @@
 
     <ImageButton
         android:id="@+id/add_Coins"
-        android:layout_width="100dp"
+        android:layout_width="70dp"
         android:layout_height="30dp"
-        app:srcCompat="@drawable/add_coins"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/add_coins" />
 
 
     <ImageView

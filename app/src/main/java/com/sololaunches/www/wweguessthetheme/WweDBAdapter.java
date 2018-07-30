@@ -173,7 +173,7 @@ public class WweDBAdapter extends SQLiteOpenHelper {
 
     public Cursor getTimeTableForStation() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "Select * from WWE_STAGE_MAIN ORDER BY MAIN_ID";
+        String query = "Select * from WWE_STAGE_MAIN  WHERE STATUS='N' ORDER BY MAIN_ID";
         Cursor cur = db.rawQuery(query, null);
         return cur;
     }

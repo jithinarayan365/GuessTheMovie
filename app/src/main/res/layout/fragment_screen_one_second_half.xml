@@ -1,0 +1,126 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/title2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/black_full">
+
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="336dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="55dp"
+        android:background="@android:color/white" />
+
+
+    <com.sololaunches.www.wweguessthetheme.WWEEditText
+        android:id="@+id/textView"
+        android:layout_width="348dp"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-269dp"
+        android:layout_toEndOf="@+id/congrats"
+        android:background="@drawable/round_edge_shape"
+        android:hint="wrestler !"
+        android:imeActionLabel="Done"
+        android:inputType="textNoSuggestions|textVisiblePassword"
+        android:paddingBottom="2dp"
+        android:paddingTop="5dp"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
+    <ImageButton
+        android:id="@+id/play"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/congrats"
+        android:layout_marginTop="89dp"
+        android:background="@drawable/rounded_corners_imagebutton"
+        app:srcCompat="@drawable/play_new" />
+
+
+    <ImageButton
+        android:id="@+id/check"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="113dp"
+        android:layout_marginTop="97dp"
+        android:background="@drawable/rounded_corners_imagebutton"
+        app:srcCompat="@drawable/check" />
+
+    <TextView
+        android:id="@+id/congrats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="15dp"
+        android:text="Congratulations!!"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/nxt_btn"
+        android:layout_width="120dp"
+        android:layout_height="27dp"
+        android:layout_below="@+id/congrats"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/next_btn" />
+
+
+    <ImageButton
+        android:id="@+id/share"
+        android:layout_width="78dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="195dp"
+        android:background="@drawable/rounded_corners_imagebutton"
+        app:srcCompat="@drawable/fb_share" />
+
+    <ImageButton
+        android:id="@+id/hints"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/play"
+        android:background="@drawable/rounded_corners_imagebutton"
+        app:srcCompat="@drawable/hints" />
+
+    <ImageButton
+        android:id="@+id/resolve"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_alignTop="@+id/play"
+        android:layout_marginStart="-113dp"
+        android:layout_toEndOf="@+id/check"
+        android:background="@drawable/rounded_corners_imagebutton"
+        app:srcCompat="@drawable/resolve_new" />
+
+    <TextView
+        android:id="@+id/trivia"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/play"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:text="He is one of the best players in the country other than that we dont have much to say because hes a big womaniser"
+        android:textColor="@android:color/background_light" />
+
+
+</RelativeLayout>
+

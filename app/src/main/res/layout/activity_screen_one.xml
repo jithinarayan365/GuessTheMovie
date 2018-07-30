@@ -11,129 +11,22 @@
     <fragment
         android:id="@+id/topFragment"
         android:name="com.sololaunches.www.wweguessthetheme.FaceActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="380dp"
-        android:layout_alignParentStart="true"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         tools:layout="@layout/first_fragment_railways" />
 
-
-    <com.sololaunches.www.wweguessthetheme.WWEEditText
-        android:id="@+id/textView"
-        android:layout_width="280dp"
-        android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/topFragment"
-        android:imeActionLabel="Done"
-        android:background="@drawable/rounded_corners_imagebutton"
-        android:hint="Enter here"
-        android:inputType="textNoSuggestions|textVisiblePassword"
-        android:paddingBottom="2dp"
-        android:paddingTop="5dp"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/check"
-        android:layout_alignParentStart="true"
-        android:background="@android:color/white" />
-
-    <ImageButton
-        android:id="@+id/play"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/textView"
-        android:layout_marginEnd="135dp"
-        android:background="@drawable/rounded_corners_imagebutton"
-        app:srcCompat="@drawable/play" />
-
-    <ImageButton
-        android:id="@+id/pause"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/textView"
-        android:layout_marginEnd="88dp"
-        android:background="@drawable/round_image"
-        app:srcCompat="@drawable/pause" />
-
-
-    <ImageButton
-        android:id="@+id/check"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/topFragment"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/rounded_corners_imagebutton"
-        app:srcCompat="@drawable/check" />
-
-    <TextView
-        android:id="@+id/congrats"
+    <fragment
+        android:id="@+id/secondFragment"
+        android:name="com.sololaunches.www.wweguessthetheme.ScreenOneSecondHalf"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:paddingTop="15dp"
-        android:text="Congratulations!!"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <ImageButton
-        android:id="@+id/nxt_btn"
-        android:layout_width="120dp"
-        android:layout_height="27dp"
-        android:layout_below="@+id/congrats"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/next_btn" />
-
-
-    <ImageButton
-        android:id="@+id/share"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/fb_share" />
-
-    <ImageButton
-        android:id="@+id/hints"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
+        android:layout_height="234dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="11dp"
-        app:srcCompat="@drawable/hints" />
+        tools:layout="@layout/fragment_screen_one_second_half" />
 
-    <ImageButton
-        android:id="@+id/resolve"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/hints"
-        app:srcCompat="@drawable/resolve_new" />
 
-    <TextView
-        android:id="@+id/trivia"
-        android:layout_width="349dp"
-        android:layout_height="85dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="111dp"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:text="He is one of the best players in the country other than that we dont have much to say because hes a big womaniser"
-        android:textColor="@android:color/background_light" />
 
 
 </RelativeLayout>
