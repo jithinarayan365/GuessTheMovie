@@ -263,8 +263,9 @@ public class ScreenOne extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mediaPlayer == null) {
-                    mediaLoad();
+                    mediaLoad(getApplicationContext());
                 }
+
                 if (!playFlag) {
                     playBtn.setImageResource(R.drawable.pause_new);
                     mediaPlayer.start();
@@ -439,6 +440,11 @@ public class ScreenOne extends AppCompatActivity {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
+    private void mediaLoad(Context ctxt) {
+        mediaPlayer = MediaPlayer.create(ctxt, songID);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+    }
+
 
     public void playCycle() {
         seekbar.setProgress(mediaPlayer.getCurrentPosition());
@@ -467,6 +473,19 @@ public class ScreenOne extends AppCompatActivity {
         mediaPlayer.release();
         handler.removeCallbacks(runnable);
         Runtime.getRuntime().gc();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("ON CHECK", "onResume: ");
+        mediaLoad(getApplicationContext());
+        playBtn.setImageResource(R.drawable.play_new);
+        pauseFlag = true;
+        playFlag = false;
+        Log.d("ON CHECK", "onResume: "+pauseFlag);
+
 
     }
 
