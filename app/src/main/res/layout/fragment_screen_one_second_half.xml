@@ -75,7 +75,7 @@
         android:layout_width="120dp"
         android:layout_height="27dp"
         android:layout_alignBottom="@+id/seekBar"
-        android:layout_alignEnd="@+id/play"
+        android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/next_btn" />
 
 

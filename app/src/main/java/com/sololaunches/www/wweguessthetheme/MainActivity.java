@@ -37,17 +37,16 @@ public class MainActivity extends AppCompatActivity {
         wweDBAdapter = new WweDBAdapter(this, null, null, 1);
         nextBtn = (ImageButton) findViewById(R.id.nxt_btn);
         player = (EditText) findViewById(R.id.player);
-        playerStatsBean =  wweConvenience.getPlayerStats(getApplicationContext());
-        note =(TextView)  findViewById(R.id.note);
+        playerStatsBean = wweConvenience.getPlayerStats(getApplicationContext());
+        note = (TextView) findViewById(R.id.note);
         note.setVisibility(View.INVISIBLE);
-        if(playerStatsBean!= null){
-            if("N".equals(playerStatsBean.getStatus())){
-                Intent i = new Intent(getApplication(), InstructionsActivity.class);
+        if (playerStatsBean != null) {
+            if ("N".equals(playerStatsBean.getStatus())) {
+                Intent i = new Intent(getApplication(), ScreenOne.class);
                 startActivity(i);
                 finish();
             }
         }
-
 
 
         nextBtn.setOnClickListener(new View.OnClickListener() {
@@ -60,12 +59,11 @@ public class MainActivity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(note.getWindowToken(), 0);
 
                 String playerName = player.getText().toString();
-                if(playerName.trim().equals("Enter player name here")){
+                if (playerName.trim().equals("Enter player name here")) {
                     playerName = "player";
                 }
 
-//                Log.d("playerStatsBean", "onClick: "+playerStatsBean.getPlayer());
-                if(playerStatsBean== null){
+                if (playerStatsBean == null) {
                     wweDBAdapter.setPlayerName(playerName);
                 }
 

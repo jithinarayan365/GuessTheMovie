@@ -23,6 +23,7 @@ public class ResolveActivity extends AppCompatActivity {
     PlayerStatsBean playerStatsBean;
     MediaPlayer mediaPlayer;
     TextView trivia;
+    String finalstat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +34,7 @@ public class ResolveActivity extends AppCompatActivity {
 
         final String display = (String) getIntent().getSerializableExtra("player");
         final String image = (String) getIntent().getSerializableExtra("image");
-        final String  finalstat = (String) getIntent().getSerializableExtra("finalstat");
+        finalstat = (String) getIntent().getSerializableExtra("finalstat");
         final String  triviaGot = (String) getIntent().getSerializableExtra("trivia");
 
         trivia = (TextView) findViewById(R.id.trivia);
@@ -80,11 +81,12 @@ public class ResolveActivity extends AppCompatActivity {
                     intent1.putExtra("player", playerStatsBean.getPlayer());
                     startActivity(intent1);
                     finish();
-                }
+                }else {
 
-                Intent intent = new Intent(getApplicationContext(), ScreenOne.class);
-                startActivity(intent);
-                finish();
+                    Intent intent = new Intent(getApplicationContext(), ScreenOne.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 

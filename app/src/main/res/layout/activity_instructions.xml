@@ -31,9 +31,9 @@
         android:id="@+id/check"
         android:layout_width="65dp"
         android:layout_height="65dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/add_Coins"
-        android:layout_marginTop="162dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/add_Coins"
+        android:layout_marginStart="12dp"
         android:background="@drawable/rounded_corners_imagebutton"
         app:srcCompat="@drawable/check" />
 
@@ -46,7 +46,7 @@
         android:layout_marginEnd="72dp"
         android:layout_marginTop="43dp"
         android:ems="10"
-        android:fontFamily="monospace"
+        android:fontFamily="sans-serif"
         android:inputType="textPersonName"
         android:text=" Hints for 20 coins"
         android:textColor="@android:color/background_light"
@@ -56,9 +56,9 @@
         android:id="@+id/editText2"
         android:layout_width="259dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="187dp"
+        android:layout_alignStart="@+id/textView4"
+        android:layout_marginTop="161dp"
         android:ems="10"
         android:fontFamily="monospace"
         android:inputType="textPersonName"
@@ -70,8 +70,9 @@
         android:id="@+id/editText3"
         android:layout_width="268dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/editText"
+        android:layout_marginTop="222dp"
         android:ems="10"
         android:fontFamily="monospace"
         android:inputType="textPersonName"
@@ -94,17 +95,15 @@
         android:layout_width="70dp"
         android:layout_height="30dp"
         android:layout_alignEnd="@+id/hints"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="114dp"
+        android:layout_below="@+id/hints"
         app:srcCompat="@drawable/add_coins" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="284dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/add_Coins"
-        android:layout_marginStart="100dp"
+        android:layout_below="@+id/hints"
+        android:layout_toEndOf="@+id/hints"
         android:fontFamily="monospace"
         android:text="Add coins by watching AD"
         android:textColor="@android:color/background_light"
@@ -120,6 +119,18 @@
         android:layout_marginBottom="44dp"
         android:text="please wait"
         android:textColor="@android:color/background_light" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="182dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="monospace"
+        android:text="# Instructions"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:typeface="monospace" />
 
 
 </RelativeLayout>
