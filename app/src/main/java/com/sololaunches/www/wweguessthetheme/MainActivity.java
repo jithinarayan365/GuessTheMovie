@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         note.setVisibility(View.INVISIBLE);
         if(playerStatsBean!= null){
             if("N".equals(playerStatsBean.getStatus())){
-                Intent i = new Intent(getApplication(), ScreenOne.class);
+                Intent i = new Intent(getApplication(), InstructionsActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     wweDBAdapter.setPlayerName(playerName);
                 }
 
-                Intent i = new Intent(getApplication(), ScreenOne.class);
+                Intent i = new Intent(getApplication(), InstructionsActivity.class);
                 startActivity(i);
                 finish();
             }

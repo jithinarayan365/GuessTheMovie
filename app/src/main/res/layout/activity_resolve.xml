@@ -42,9 +42,8 @@
         android:id="@+id/coins"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/super_star"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="105dp"
         android:text="TextView"
         android:textColor="@android:color/background_light"
         android:textSize="18sp" />
@@ -61,9 +60,8 @@
         android:id="@+id/trivia"
         android:layout_width="match_parent"
         android:layout_height="59dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="74dp"
+        android:layout_below="@+id/answer"
         android:ems="10"
         android:inputType="textMultiLine"
         android:textColor="@android:color/background_light" />

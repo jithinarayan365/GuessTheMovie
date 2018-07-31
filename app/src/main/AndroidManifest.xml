@@ -16,10 +16,10 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:largeHeap="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
@@ -43,13 +43,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScreenOne"
+        <activity
+            android:name=".ScreenOne"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".FaceActivity" />
         <activity android:name=".CongratuationsActivity" />
         <activity android:name=".ResolveActivity" />
         <activity android:name=".AddCoin" />
-        <activity android:name=".Certificate"></activity>
+        <activity android:name=".Certificate" />
+        <activity android:name=".InstructionsActivity"></activity>
     </application>
 
 </manifest>
