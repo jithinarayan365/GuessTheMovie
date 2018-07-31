@@ -30,20 +30,20 @@
     <TextView
         android:id="@+id/answer"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="172dp"
         android:textAlignment="center"
         android:textColor="@android:color/background_light"
-        android:textSize="30sp"
-        android:layout_below="@+id/super_star"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/coins"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/super_star"
-        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@+id/ok"
+        android:layout_alignParentStart="true"
         android:text="TextView"
         android:textColor="@android:color/background_light"
         android:textSize="18sp" />
@@ -59,9 +59,10 @@
     <TextView
         android:id="@+id/trivia"
         android:layout_width="match_parent"
-        android:layout_height="59dp"
+        android:layout_height="93dp"
+        android:layout_above="@+id/ok"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/answer"
+        android:layout_marginStart="0dp"
         android:ems="10"
         android:inputType="textMultiLine"
         android:textColor="@android:color/background_light" />

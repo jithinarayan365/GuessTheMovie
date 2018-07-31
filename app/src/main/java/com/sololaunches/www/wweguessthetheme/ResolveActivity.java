@@ -23,7 +23,7 @@ public class ResolveActivity extends AppCompatActivity {
     PlayerStatsBean playerStatsBean;
     MediaPlayer mediaPlayer;
     TextView trivia;
-    String finalstat;
+    String lastStatus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +34,7 @@ public class ResolveActivity extends AppCompatActivity {
 
         final String display = (String) getIntent().getSerializableExtra("player");
         final String image = (String) getIntent().getSerializableExtra("image");
-        finalstat = (String) getIntent().getSerializableExtra("finalstat");
+        lastStatus = (String) getIntent().getSerializableExtra("finalstat");
         final String  triviaGot = (String) getIntent().getSerializableExtra("trivia");
 
         trivia = (TextView) findViewById(R.id.trivia);
@@ -74,7 +74,7 @@ public class ResolveActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mediaPlayer.stop();
 
-                if(finalstat.equalsIgnoreCase("F")){
+                if(lastStatus.equalsIgnoreCase("F")){
                     wweDBAdapter.updateFinishGame(playerStatsBean.getPlayer());
                     Intent intent1 = new Intent(getApplicationContext(), Certificate.class);
                     intent1.putExtra("points", playerStatsBean.getPoints());
