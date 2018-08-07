@@ -466,11 +466,18 @@ public class ScreenOne extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
-        mediaPlayer = MediaPlayer.create(this, songID);
-        playBtn.setImageResource(R.drawable.play_new);
-        pauseFlag = true;
-        playFlag = false;
+        try {
+            super.onResume();
+            mediaPlayer = MediaPlayer.create(this, songID);
+            playBtn.setImageResource(R.drawable.play_new);
+            pauseFlag = true;
+            playFlag = false;
+
+        }catch (Exception e){
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
     }
 
 }
