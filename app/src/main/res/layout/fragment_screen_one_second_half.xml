@@ -18,7 +18,7 @@
         android:background="@android:color/white" />
 
 
-    <com.sololaunches.www.wweguessthetheme.WWEEditText
+    <EditText
         android:id="@+id/textView"
         android:layout_width="282dp"
         android:layout_height="45dp"
@@ -27,7 +27,7 @@
         android:background="@drawable/round_edge_shape"
         android:hint="wrestler !"
         android:imeActionLabel="Done"
-        android:inputType="textNoSuggestions|textVisiblePassword"
+        android:inputType="textNoSuggestions|textVisiblePassword|textFilter"
         android:paddingBottom="2dp"
         android:paddingTop="5dp"
         android:textAlignment="center"
@@ -60,7 +60,7 @@
     <TextView
         android:id="@+id/congrats"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:paddingTop="15dp"
@@ -74,8 +74,9 @@
         android:id="@+id/nxt_btn"
         android:layout_width="120dp"
         android:layout_height="27dp"
-        android:layout_alignBottom="@+id/seekBar"
+        android:layout_above="@+id/play"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-87dp"
         app:srcCompat="@drawable/next_btn" />
 
 
@@ -83,9 +84,9 @@
         android:id="@+id/share"
         android:layout_width="78dp"
         android:layout_height="40dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="195dp"
+        android:layout_marginTop="188dp"
         android:background="@drawable/rounded_corners_imagebutton"
         app:srcCompat="@drawable/fb_share" />
 
@@ -111,8 +112,9 @@
         android:id="@+id/trivia"
         android:layout_width="match_parent"
         android:layout_height="85dp"
+        android:layout_above="@+id/share"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/play"
+        android:layout_marginBottom="-188dp"
         android:ems="10"
         android:inputType="textMultiLine"
         android:text="He is one of the best players in the country other than that we dont have much to say because hes a big womaniser"

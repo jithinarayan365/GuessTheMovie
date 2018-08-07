@@ -42,4 +42,25 @@
         android:layout_marginEnd="34dp"
         android:layout_marginRight="34dp"
         app:srcCompat="@drawable/next_btn" />
+
+    <ImageView
+        android:id="@+id/wwe_image"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="97dp"
+        app:srcCompat="@drawable/wwe_then" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="107dp"
+        android:fontFamily="serif"
+        android:text="well done! click next"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp" />
 </RelativeLayout>

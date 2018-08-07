@@ -35,7 +35,6 @@ public class WweMainBean {
     }
 
 
-
     public String getHint() {
         return hint;
     }
@@ -61,8 +60,6 @@ public class WweMainBean {
     }
 
 
-
-
     public String getDisplay() {
         return display;
     }
@@ -70,7 +67,6 @@ public class WweMainBean {
     public void setDisplay(String display) {
         this.display = display;
     }
-
 
 
     public String getStatus() {
@@ -104,7 +100,6 @@ public class WweMainBean {
     public void setPosition(String position) {
         this.position = position;
     }
-
 
 
 }

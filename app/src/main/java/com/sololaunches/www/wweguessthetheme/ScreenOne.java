@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -43,7 +45,7 @@ public class ScreenOne extends AppCompatActivity {
     boolean pauseFlag, playFlag;
     String PACKAGE_NAME;
     InputMethodManager imm;
-    WWEEditText textVal;
+    EditText textVal;
     TextView congrats, level, coinStats, trivia;
     WweMainBean beanUnsolved;
     PlayerStatsBean playerStatsBean, playerStatsBean2;
@@ -106,12 +108,46 @@ public class ScreenOne extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Make to run your application only in portrait mode
-
         StartAppSDK.init(this, "203580885", true);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN |     WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.activity_screen_one);
+
+        // widgets
+        trivia = (TextView) findViewById(R.id.trivia);
+        textVal = (EditText) findViewById(R.id.textView);
+        congrats = (TextView) findViewById(R.id.congrats);
+        level = (TextView) findViewById(R.id.level_txt);
+        coinStats = (TextView) findViewById(R.id.coin_txt);
+        nxt_btn = (ImageButton) findViewById(R.id.nxt_btn);
+        resolve = (ImageButton) findViewById(R.id.resolve);
+        add_Coins = (ImageButton) findViewById(R.id.add_Coins);
+        share = (ImageButton) findViewById(R.id.share);
+        playBtn = (ImageButton) findViewById(R.id.play);
+        textVal.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS|InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+
+
+
+        add_Coins.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                // ARE WE CONNECTED TO THE NET
+                if (conMgr.getActiveNetworkInfo() != null
+                        && conMgr.getActiveNetworkInfo().isAvailable()
+                        && conMgr.getActiveNetworkInfo().isConnected()) {
+                    startAppAd.showAd();
+
+                } else {
+                    Snackbar mySnackbar = Snackbar.make(v, "Make sure you have an active internet connection!", 5000);
+                    mySnackbar.show();
+                }
+            }
+        });
+        seekbar = (SeekBar) findViewById(R.id.seekBar);
+
+
+
+        // startApp
         startAppAdInst = new StartAppAd(this);
         startAppAd = new StartAppAd(this);
         startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO);
@@ -127,45 +163,24 @@ public class ScreenOne extends AppCompatActivity {
         if (cur2.getCount() == 0) {
             return;
         }
-        ArrayList<WweMainBean> list = new ArrayList<WweMainBean>();
+
         beanUnsolved = new WweMainBean();
-
-
         while (cur2.moveToNext()) {
-            String status = cur2.getString(8);
-
-            if ("N".equals(status) && !firstSignal) {
-                beanUnsolved.setPosition(cur2.getString(0));
-                beanUnsolved.setPlayer(cur2.getString(1));
-                beanUnsolved.setAlias(cur2.getString(2));
-                beanUnsolved.setPath(cur2.getString(3));
-                beanUnsolved.setDisplay(cur2.getString(4));
-                beanUnsolved.setHint(cur2.getString(5));
-                beanUnsolved.setHintStatus(cur2.getString(6));
-                beanUnsolved.setAdStatus(cur2.getString(7));
-                beanUnsolved.setStatus(cur2.getString(8));
-                beanUnsolved.setTrivia(cur2.getString(9));
-                firstSignal = true;
-                break;
-            } else {
-                WweMainBean bean = new WweMainBean();
-                bean.setPosition(cur2.getString(0));
-                bean.setAlias(cur2.getString(2));
-                bean.setPath(cur2.getString(3));
-                bean.setPlayer(cur2.getString(1));
-                bean.setDisplay(cur2.getString(4));
-                bean.setHint(cur2.getString(5));
-                bean.setHintStatus(cur2.getString(6));
-                bean.setAdStatus(cur2.getString(7));
-                bean.setStatus(cur2.getString(8));
-                bean.setTrivia(cur2.getString(9));
-
-                list.add(bean);
-            }
+            beanUnsolved.setPosition(cur2.getString(0));
+            beanUnsolved.setPlayer(cur2.getString(1));
+            beanUnsolved.setAlias(cur2.getString(2));
+            beanUnsolved.setPath(cur2.getString(3));
+            beanUnsolved.setDisplay(cur2.getString(4));
+            beanUnsolved.setHint(cur2.getString(5));
+            beanUnsolved.setHintStatus(cur2.getString(6));
+            beanUnsolved.setAdStatus(cur2.getString(7));
+            beanUnsolved.setStatus(cur2.getString(8));
+            beanUnsolved.setTrivia(cur2.getString(9));
         }
 
-        /* startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO);
-         */
+        songID = getResources().getIdentifier(PACKAGE_NAME + ":raw/" + beanUnsolved.getPlayer(), null, null);
+        mediaLoad();
+
         startAppAd.setVideoListener(new VideoListener() {
             @Override
             public void onVideoCompleted() {
@@ -176,37 +191,26 @@ public class ScreenOne extends AppCompatActivity {
                 wweDBAdapter.updateAddedCoins(playerStatsBean2);
             }
         });
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        trivia = (TextView) findViewById(R.id.trivia);
-        textVal = (WWEEditText) findViewById(R.id.textView);
         textVal.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         trivia.setVisibility(View.INVISIBLE);
-        congrats = (TextView) findViewById(R.id.congrats);
-        level = (TextView) findViewById(R.id.level_txt);
-        coinStats = (TextView) findViewById(R.id.coin_txt);
         congrats.setVisibility(View.INVISIBLE);
         coinStats.setText(playerStatsBean.getCoins());
-        nxt_btn = (ImageButton) findViewById(R.id.nxt_btn);
         nxt_btn.setVisibility(View.INVISIBLE);
-
-
         level.setText("Level -" + beanUnsolved.getPosition());
-        songID = getResources().getIdentifier(PACKAGE_NAME + ":raw/" + beanUnsolved.getPlayer(), null, null);
 
         handler = new Handler();
-        mediaLoad();
-
-
-        seekbar = (SeekBar) findViewById(R.id.seekBar);
 
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                seekbar.setMax(mediaPlayer.getDuration());
-                playCycle();
-
+                if (mediaPlayer != null) {
+                    seekbar.setMax(mediaPlayer.getDuration());
+                    playCycle();
+                }
             }
         });
 
@@ -217,8 +221,6 @@ public class ScreenOne extends AppCompatActivity {
                 if (input) {
                     mediaPlayer.seekTo(progress);
                 }
-
-
             }
 
             @Override
@@ -230,20 +232,7 @@ public class ScreenOne extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
-
-
         });
-        resolve = (ImageButton) findViewById(R.id.resolve);
-        add_Coins = (ImageButton) findViewById(R.id.add_Coins);
-        share = (ImageButton) findViewById(R.id.share);
-        playBtn = (ImageButton) findViewById(R.id.play);
-        add_Coins.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAppAd.showAd();
-            }
-        });
-
 
         share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,7 +241,6 @@ public class ScreenOne extends AppCompatActivity {
                 intent.setType("text/plain");
                 String sub = "WWE guess the theme song ";
                 String body = "Download -'guess the WWE theme song'  app from playstore from the link " + "http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName();
-
                 intent.putExtra(Intent.EXTRA_SUBJECT, sub);
                 intent.putExtra(Intent.EXTRA_TEXT, body);
                 startActivity(Intent.createChooser(intent, " CHOOSE USING "));
@@ -479,14 +467,10 @@ public class ScreenOne extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("ON CHECK", "onResume: ");
-        mediaLoad(getApplicationContext());
+        mediaPlayer = MediaPlayer.create(this, songID);
         playBtn.setImageResource(R.drawable.play_new);
         pauseFlag = true;
         playFlag = false;
-        Log.d("ON CHECK", "onResume: "+pauseFlag);
-
-
     }
 
 }

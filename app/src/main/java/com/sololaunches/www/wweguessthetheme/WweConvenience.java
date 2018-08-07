@@ -2,9 +2,6 @@ package com.sololaunches.www.wweguessthetheme;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
-
-import java.util.ArrayList;
 
 /**
  * Created by hp on 25-03-2018.
@@ -14,7 +11,7 @@ public class WweConvenience {
 
     WweDBAdapter wweDBAdapter;
 
-    public WweMainBean getSuperStarBean(String player){
+    public WweMainBean getSuperStarBean(String player) {
         WweMainBean wweMainBean = new WweMainBean();
         Cursor cur2 = wweDBAdapter.getSuperStar(player);
         if (cur2.getCount() == 0) {
@@ -36,8 +33,6 @@ public class WweConvenience {
     }
 
 
-
-
     public PlayerStatsBean getPlayerStats(Context context) {
 
         PlayerStatsBean playerStatsBean = new PlayerStatsBean();
@@ -53,7 +48,6 @@ public class WweConvenience {
             playerStatsBean.setCoins(cur.getString(2));
             playerStatsBean.setPoints(cur.getString(3));
             playerStatsBean.setStatus(cur.getString(4));
-            Log.d("playerStat", "get: "+cur.getString(1));
             return playerStatsBean;
         }
         return null;
@@ -75,40 +69,38 @@ public class WweConvenience {
         if (value.trim().contains(" ")) {
             String[] arr = value.toLowerCase().split(" ");
             int checkc = 0;
-            for(String s : arr){
-                int num = getMatchPercentage(stored,s);
+            for (String s : arr) {
+                int num = getMatchPercentage(stored, s);
                 checkc = checkc + num;
             }
-            if(checkc > 50 ){
+            if (checkc > 50) {
                 return true;
             }
         }
 
         String[] doubleEnd = getDoubleStrings(fullValue);
-        for(String str : doubleEnd){
-            int check1 = getMatchPercentage(stored,str.toLowerCase());
-            if(check1 > 70 ){
+        for (String str : doubleEnd) {
+            int check1 = getMatchPercentage(stored, str.toLowerCase());
+            if (check1 > 70) {
                 return true;
             }
         }
 
-        char[] charArr   = fullValue.toCharArray();
+        char[] charArr = fullValue.toCharArray();
         StringBuffer stb = new StringBuffer();
-        for(char c : charArr){
+        for (char c : charArr) {
             stb.append(c);
-            Log.d("check one step", "getResult: "+stb);
-            int check1 = getMatchPercentage(stored,stb.toString().toLowerCase());
-            Log.d("check one step", "getResult: "+check1);
-            if(check1 > 70 ){
+            int check1 = getMatchPercentage(stored, stb.toString().toLowerCase());
+            if (check1 > 70) {
                 return true;
             }
         }
         stb = new StringBuffer();
-        for(int i=(charArr.length-1);i>=0;i--){
+        for (int i = (charArr.length - 1); i >= 0; i--) {
             String st = String.valueOf(charArr[i]);
             stb.append(stb + st);
-            int check1 = getMatchPercentage(stored,stb.toString().toLowerCase());
-            if(check1 > 70 ){
+            int check1 = getMatchPercentage(stored, stb.toString().toLowerCase());
+            if (check1 > 70) {
                 return true;
             }
         }
@@ -123,17 +115,13 @@ public class WweConvenience {
         StringBuffer stb1 = new StringBuffer();
         String[] str = new String[2];
 
-        for(int i=(charArr.length-1);i>0;i--){
-            stb.append( String.valueOf(charArr[i]));
+        for (int i = (charArr.length - 1); i > 0; i--) {
+            stb.append(String.valueOf(charArr[i]));
         }
         stb.reverse();
-        Log.d("CHECK stb", "getDoubleStrings: " +stb+"-- ");
 
-        for(int i=0;i<(charArr.length-1);i++){
-            Log.d("CHECK", "getDoubleStrings: " +i+"-- ");
+        for (int i = 0; i < (charArr.length - 1); i++) {
             stb1.append(charArr[i]);
-            Log.d("CHECK stb1", "getDoubleStrings: " +stb1+"-- ");
-
         }
         str[0] = stb.toString();
         str[1] = stb1.toString();
@@ -143,7 +131,7 @@ public class WweConvenience {
     private String getFullString(String str) {
         String[] arr = str.toLowerCase().split("\\s+");
         StringBuffer stbf = new StringBuffer();
-        for(String s : arr){
+        for (String s : arr) {
             stbf.append(s);
         }
         return stbf.toString();
@@ -159,16 +147,14 @@ public class WweConvenience {
     public int getMatchPercentage(String stored, String value) {
 
         int storedVal = stored.length();
-        int val       = value.length();
+        int val = value.length();
 
         float proportion = ((float) val) / ((float) storedVal);
         float progress = proportion * 100;
         int finalCal = (int) progress;
-        Log.d("percent match", "getMatchPercentage: "+finalCal);
-
-        if(stored.contains(value.toLowerCase().trim())){
+        if (stored.contains(value.toLowerCase().trim())) {
             return finalCal;
-        }else{
+        } else {
             return 0;
         }
 

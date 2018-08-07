@@ -14,8 +14,5 @@ public class AddCoin extends AppCompatActivity {
         setContentView(R.layout.activity_add_coin);
         wweDBAdapter = new WweDBAdapter(this, null, null, 1);
         playerStatsBean = wweDBAdapter.getPlayerStats();
-
-
-
     }
 }

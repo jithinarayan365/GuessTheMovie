@@ -45,7 +45,9 @@
         </activity>
         <activity
             android:name=".ScreenOne"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateVisible|stateAlwaysHidden"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true" />
         <activity android:name=".FaceActivity" />
         <activity android:name=".CongratuationsActivity" />
         <activity android:name=".ResolveActivity" />

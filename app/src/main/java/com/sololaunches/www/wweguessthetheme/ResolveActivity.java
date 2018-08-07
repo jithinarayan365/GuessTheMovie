@@ -7,7 +7,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ResolveActivity extends AppCompatActivity {
-    TextView tv,coinsTxt;
+    TextView tv, coinsTxt;
     ImageButton imageButton;
     String PACKAGE_NAME;
     WweDBAdapter wweDBAdapter;
@@ -24,6 +23,7 @@ public class ResolveActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     TextView trivia;
     String lastStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +35,7 @@ public class ResolveActivity extends AppCompatActivity {
         final String display = (String) getIntent().getSerializableExtra("player");
         final String image = (String) getIntent().getSerializableExtra("image");
         lastStatus = (String) getIntent().getSerializableExtra("finalstat");
-        final String  triviaGot = (String) getIntent().getSerializableExtra("trivia");
+        final String triviaGot = (String) getIntent().getSerializableExtra("trivia");
 
         trivia = (TextView) findViewById(R.id.trivia);
 
@@ -49,22 +49,20 @@ public class ResolveActivity extends AppCompatActivity {
         ImageView superstar = (ImageView) findViewById(R.id.super_star);
         int imgId = getResources().getIdentifier(PACKAGE_NAME + ":drawable/" + image, null, null);
         superstar.setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
-        //playerStatsBean =  wweConvenience.getPlayerStats(getApplicationContext());
         playerStatsBean = wweDBAdapter.getPlayerStats();
 
         int songID = getResources().getIdentifier(PACKAGE_NAME + ":raw/" + image, null, null);
-        Log.d("songID", "onCreate: " + image);
         mediaPlayer = MediaPlayer.create(this, songID);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.start();
 
-        int coins  = Integer.parseInt(playerStatsBean.getCoins()) - 50;
-        int points  =  Integer.parseInt(playerStatsBean.getPoints()) + 3;
-        coinsTxt.setText(coins+" coins left"  );
+        int coins = Integer.parseInt(playerStatsBean.getCoins()) - 50;
+        int points = Integer.parseInt(playerStatsBean.getPoints()) + 3;
+        coinsTxt.setText(coins + " coins left");
 
         playerStatsBean.setPoints(String.valueOf(points));
         playerStatsBean.setCoins(String.valueOf(coins));
-        wweDBAdapter.updateStateUp(playerStatsBean,image);
+        wweDBAdapter.updateStateUp(playerStatsBean, image);
 
         Toast toast = Toast.makeText(getApplicationContext(), "Click OK for next Level", Toast.LENGTH_LONG);
         toast.show();
@@ -74,14 +72,14 @@ public class ResolveActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mediaPlayer.stop();
 
-                if(lastStatus.equalsIgnoreCase("F")){
+                if (lastStatus.equalsIgnoreCase("F")) {
                     wweDBAdapter.updateFinishGame(playerStatsBean.getPlayer());
                     Intent intent1 = new Intent(getApplicationContext(), Certificate.class);
                     intent1.putExtra("points", playerStatsBean.getPoints());
                     intent1.putExtra("player", playerStatsBean.getPlayer());
                     startActivity(intent1);
                     finish();
-                }else {
+                } else {
 
                     Intent intent = new Intent(getApplicationContext(), ScreenOne.class);
                     startActivity(intent);
@@ -90,5 +88,12 @@ public class ResolveActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.release();
+        Runtime.getRuntime().gc();
     }
 }

@@ -10,7 +10,6 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 /**
  * Created by hp on 25-03-2018.
@@ -22,8 +21,9 @@ public class WweDBAdapter extends SQLiteOpenHelper {
     DBInserter dbinserter;
 
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "Kerala_Railway.db";
+    private static final String DATABASE_ALTER_TEAM_1 = "DROP TABLE IF EXISTS WWE_STAGE_MAIN";
 
 
     public WweDBAdapter(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -32,29 +32,29 @@ public class WweDBAdapter extends SQLiteOpenHelper {
         this.contextC = context;
         dbinserter = new DBInserter();
         dbinserter.insertAllValues(context, db);
-
-
     }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-
-        // Context con  = getApplicationContext();
         String query = WWEConstants.MAIN_WWE_TABLE;                //Railway Main table
         String queryMetro = WWEConstants.MAIN_PLAYER;
-        // Railway secondary table
-
         db.execSQL(query);
         db.execSQL(queryMetro);
-
-
     }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+
+        if (oldVersion < 2) {
+            //SQLiteDatabase db2 = ge.getWritableDatabase();
+            db.execSQL(DATABASE_ALTER_TEAM_1);
+            String query = WWEConstants.MAIN_WWE_TABLE;
+            db.execSQL(query);               //Railway Main table
+            dbinserter = new DBInserter();
+        }
 
     }
 
@@ -69,7 +69,7 @@ public class WweDBAdapter extends SQLiteOpenHelper {
         db.close();
     }
 
-    public PlayerStatsBean getPlayerStats(){
+    public PlayerStatsBean getPlayerStats() {
         PlayerStatsBean playerStatsBean = new PlayerStatsBean();
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "Select * from WWE_PLAYER_STAT WHERE STATUS='N'";
@@ -82,14 +82,13 @@ public class WweDBAdapter extends SQLiteOpenHelper {
             playerStatsBean.setCoins(cur.getString(2));
             playerStatsBean.setPoints(cur.getString(3));
             playerStatsBean.setStatus(cur.getString(4));
-            Log.d("playerStat", "get: "+cur.getString(1));
         }
         return playerStatsBean;
 
     }
 
 
-    public void updateFinishGame(String str){
+    public void updateFinishGame(String str) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("STATUS", "Y");
@@ -127,7 +126,7 @@ public class WweDBAdapter extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateAddedCoins(PlayerStatsBean playerStatsBean){
+    public void updateAddedCoins(PlayerStatsBean playerStatsBean) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("COINS", playerStatsBean.getCoins());
@@ -149,7 +148,6 @@ public class WweDBAdapter extends SQLiteOpenHelper {
                     BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertsStream));
                     while (insertReader.ready()) {
                         String insertStmt = insertReader.readLine();
-                        Log.d("INSERTING", "onCreate: " + insertStmt);
                         db.execSQL(insertStmt);
                         result++;
                     }
@@ -173,7 +171,7 @@ public class WweDBAdapter extends SQLiteOpenHelper {
 
     public Cursor getTimeTableForStation() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "Select * from WWE_STAGE_MAIN  WHERE STATUS='N' ORDER BY MAIN_ID";
+        String query = "Select * from WWE_STAGE_MAIN  WHERE STATUS='N' ORDER BY MAIN_ID LIMIT 1";
         Cursor cur = db.rawQuery(query, null);
         return cur;
     }

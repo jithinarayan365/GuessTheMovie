@@ -47,18 +47,16 @@ public class Certificate extends AppCompatActivity {
         actionBar.hide();
         setContentView(R.layout.activity_certificate);
 
+        // widget
+        TextView score = (TextView) findViewById(R.id.score);
+        TextView playerName = (TextView) findViewById(R.id.player);
+        ImageButton nxt_btn = (ImageButton) findViewById(R.id.nxt);
+        ImageButton rate = (ImageButton) findViewById(R.id.rate);
 
         String points = (String) getIntent().getSerializableExtra("points");
         String player = (String) getIntent().getSerializableExtra("player");
-
-        TextView score = (TextView)findViewById(R.id.score);
-        TextView playerName = (TextView)findViewById(R.id.player);
-        ImageButton nxt_btn  = (ImageButton)findViewById(R.id.nxt);
-        ImageButton rate  = (ImageButton)findViewById(R.id.rate);
-
-
-        score.setText("Score :"+points+ " points");
-        playerName.setText(" "+player);
+        score.setText("Score :" + points + " points");
+        playerName.setText(" " + player);
 
 
         nxt_btn.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +72,7 @@ public class Certificate extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getApplicationContext().getPackageName())));
-                    Log.d("checck ", "onClick: " + "market://details?id=" + getApplicationContext().getPackageName());
+
                 } catch (Exception e1) {
                     Toast toast = Toast.makeText(getApplicationContext(), "you are unable to open the link", Toast.LENGTH_LONG);
                     toast.show();
@@ -82,7 +80,6 @@ public class Certificate extends AppCompatActivity {
                 }
             }
         });
-
 
 
     }
