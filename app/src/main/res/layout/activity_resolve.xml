@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/black_full"
-    tools:context="com.sololaunches.www.wweguessthetheme.ResolveActivity">
+    tools:context="com.sololaunches.www.wweguessthethemetwo.ResolveActivity">
 
     <ImageView
         android:id="@+id/super_star"

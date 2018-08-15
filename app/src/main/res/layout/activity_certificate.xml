@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wrestling_certificate"
-    tools:context="com.sololaunches.www.wweguessthetheme.Certificate">
+    tools:context="com.sololaunches.www.wweguessthethemetwo.Certificate">
 
     <TextView
         android:id="@+id/player"

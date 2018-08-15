@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
+
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
-        applicationId "com.sololaunches.www.wweguessthetheme"
+        applicationId "com.sololaunches.www.wweguessthethemetwo"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 8
