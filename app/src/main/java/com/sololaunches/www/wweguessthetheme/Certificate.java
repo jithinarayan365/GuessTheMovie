@@ -1,12 +1,12 @@
 package com.sololaunches.www.wweguessthetheme;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -15,6 +15,8 @@ import android.widget.Toast;
 public class Certificate extends AppCompatActivity {
 
     private boolean exit = false;
+    char arr[];
+    TextView playerName;
 
     @Override
     public void onBackPressed() {
@@ -49,14 +51,20 @@ public class Certificate extends AppCompatActivity {
 
         // widget
         TextView score = (TextView) findViewById(R.id.score);
-        TextView playerName = (TextView) findViewById(R.id.player);
+        playerName = (TextView) findViewById(R.id.player);
         ImageButton nxt_btn = (ImageButton) findViewById(R.id.nxt);
         ImageButton rate = (ImageButton) findViewById(R.id.rate);
 
         String points = (String) getIntent().getSerializableExtra("points");
         String player = (String) getIntent().getSerializableExtra("player");
+
+
         score.setText("Score :" + points + " points");
-        playerName.setText(" " + player);
+        playerName.setText("Congratulations  " + player + "                                                             ");
+
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/harlow.ttf");
+        playerName.setTypeface(typeface);
+        playerName.setText("    " + player);
 
 
         nxt_btn.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +72,8 @@ public class Certificate extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
+
             }
         });
 
@@ -83,4 +93,6 @@ public class Certificate extends AppCompatActivity {
 
 
     }
+
+
 }

@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,7 +23,6 @@ public class ResolveActivity extends AppCompatActivity {
     PlayerStatsBean playerStatsBean;
     MediaPlayer mediaPlayer;
     TextView trivia;
-    String lastStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class ResolveActivity extends AppCompatActivity {
 
         final String display = (String) getIntent().getSerializableExtra("player");
         final String image = (String) getIntent().getSerializableExtra("image");
-        lastStatus = (String) getIntent().getSerializableExtra("finalstat");
+        final String lastStatus = (String) getIntent().getSerializableExtra("finalstat");
         final String triviaGot = (String) getIntent().getSerializableExtra("trivia");
 
         trivia = (TextView) findViewById(R.id.trivia);
@@ -71,8 +71,10 @@ public class ResolveActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mediaPlayer.stop();
-
+                Log.d("check stats", "onClick: "+ lastStatus);
                 if (lastStatus.equalsIgnoreCase("F")) {
+                    Log.d("check stats 2", "onClick: "+ lastStatus);
+
                     wweDBAdapter.updateFinishGame(playerStatsBean.getPlayer());
                     Intent intent1 = new Intent(getApplicationContext(), Certificate.class);
                     intent1.putExtra("points", playerStatsBean.getPoints());

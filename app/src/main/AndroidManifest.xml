@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sololaunches.www.wweguessthetheme">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -51,7 +52,6 @@
         <activity android:name=".FaceActivity" />
         <activity android:name=".CongratuationsActivity" />
         <activity android:name=".ResolveActivity" />
-        <activity android:name=".AddCoin" />
         <activity android:name=".Certificate" />
         <activity android:name=".InstructionsActivity"></activity>
     </application>
