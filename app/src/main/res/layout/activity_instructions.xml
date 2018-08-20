@@ -48,7 +48,7 @@
         android:ems="10"
         android:fontFamily="sans-serif"
         android:inputType="textPersonName"
-        android:text=" Hints for 20 coins"
+        android:text=" Hints "
         android:textColor="@android:color/background_light"
         android:textSize="18sp" />
 

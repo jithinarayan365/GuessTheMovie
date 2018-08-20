@@ -10,7 +10,7 @@
 
     <fragment
         android:id="@+id/topFragment"
-        android:name="com.sololaunches.www.wweguessthetheme.FaceActivity"
+        android:name="com.sololaunches.www.wweguessthethemetwo.FaceActivity"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:layout_alignParentEnd="true"
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/secondFragment"
-        android:name="com.sololaunches.www.wweguessthetheme.ScreenOneSecondHalf"
+        android:name="com.sololaunches.www.wweguessthethemetwo.ScreenOneSecondHalf"
         android:layout_width="match_parent"
         android:layout_height="234dp"
         android:layout_alignParentBottom="true"
