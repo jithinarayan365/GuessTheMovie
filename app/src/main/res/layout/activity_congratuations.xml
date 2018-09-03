@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/frame_1"
     android:id="@+id/congrats"
-    tools:context="com.sololaunches.www.wweguessthethemetwo.CongratuationsActivity">
+    tools:context="com.sololaunches.www.guessthemoviehollywood.CongratuationsActivity">
 
     <TextView
         android:id="@+id/line1"

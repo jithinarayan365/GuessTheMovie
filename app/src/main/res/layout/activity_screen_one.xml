@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/black_full"
-    tools:context="com.sololaunches.www.wweguessthethemetwo.ScreenOne">
+    tools:context="com.sololaunches.www.guessthemoviehollywood.ScreenOne">
 
 
     <fragment
         android:id="@+id/topFragment"
-        android:name="com.sololaunches.www.wweguessthethemetwo.FaceActivity"
+        android:name="com.sololaunches.www.guessthemoviehollywood.FaceActivity"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:layout_alignParentEnd="true"
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/secondFragment"
-        android:name="com.sololaunches.www.wweguessthethemetwo.ScreenOneSecondHalf"
+        android:name="com.sololaunches.www.guessthemoviehollywood.ScreenOneSecondHalf"
         android:layout_width="match_parent"
         android:layout_height="234dp"
         android:layout_alignParentBottom="true"
