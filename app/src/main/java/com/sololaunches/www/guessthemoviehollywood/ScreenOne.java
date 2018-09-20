@@ -315,8 +315,21 @@ public class ScreenOne extends AppCompatActivity {
             public void onClick(View v) {
 
                 WweMainBean mainBean = wweConvenience.getSuperStarBean(beanUnsolved.getPlayer());
-                Snackbar mySnackbar = Snackbar.make(v, mainBean.getHint(), 10000);
-                mySnackbar.show();
+                if (beanUnsolved.getHintStatus().equalsIgnoreCase("Y")) {
+                    Snackbar mySnackbar = Snackbar.make(v, mainBean.getHint(), 10000);
+                    mySnackbar.show();
+                } else if (Integer.parseInt(playerStatsBean.getCoins()) < 40) {
+                    Snackbar mySnackbar = Snackbar.make(v, "You dont have Enough Coins, watch an AD to add Coins", 2000);
+                    mySnackbar.show();
+                } else {
+                    int coins = Integer.parseInt(playerStatsBean.getCoins()) - 40;
+                    playerStatsBean.setCoins(String.valueOf(coins));
+                    beanUnsolved.setHintStatus("Y");
+                    wweDBAdapter.updateHintUsed(playerStatsBean, mainBean.getPlayer());
+                    coinStats.setText(playerStatsBean.getCoins());
+                    Snackbar mySnackbar = Snackbar.make(v, mainBean.getHint(), 10000);
+                    mySnackbar.show();
+                }
 
 
             }
