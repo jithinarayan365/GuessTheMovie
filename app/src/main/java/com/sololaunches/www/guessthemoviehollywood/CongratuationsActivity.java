@@ -22,27 +22,21 @@ import java.lang.ref.WeakReference;
 
 public class CongratuationsActivity extends AppCompatActivity {
 
-    boolean flag, one, two, three;
+    boolean flag, one, two, three, four;
     public static final int CHANGE_BGCOLOR = 1;
     String ad;
-    MediaPlayer mediaPlayer;
+    //MediaPlayer mediaPlayer;
     String PACKAGE_NAME;
     private WeakReference<Context> mContext;
     ImageView wwe_image;
     private boolean exit = false;
 
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mediaPlayer != null) {
-            mediaPlayer.pause();
-        }
-    }
 
 
     @Override
     public void onBackPressed() {
+        /*
         if (exit) {
             mediaPlayer.pause();
             finish();
@@ -55,6 +49,7 @@ public class CongratuationsActivity extends AppCompatActivity {
             }
         }
         super.onBackPressed();
+        */
     }
 
     @Override
@@ -66,9 +61,9 @@ public class CongratuationsActivity extends AppCompatActivity {
 
         PACKAGE_NAME = getApplicationContext().getPackageName();
         int songID = getResources().getIdentifier(PACKAGE_NAME + ":raw/raw", null, null);
-        mediaPlayer = MediaPlayer.create(this, songID);
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.start();
+       // mediaPlayer = MediaPlayer.create(this, songID);
+       // mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        //mediaPlayer.start();
         setContentView(R.layout.activity_congratuations);
 
         wwe_image = (ImageView) findViewById(R.id.wwe_image);
@@ -83,9 +78,11 @@ public class CongratuationsActivity extends AppCompatActivity {
 
 
         String nextColor = ""; // Next background color;
+
         Message m = handler.obtainMessage(CHANGE_BGCOLOR, nextColor);
         one = true;
         handler.sendMessageDelayed(m, 200);
+
 
         line1.setText(" You have scored " + points + " points");
         line2.setText("You have a total of " + coins + " coins");
@@ -94,8 +91,8 @@ public class CongratuationsActivity extends AppCompatActivity {
         nxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer.pause();
-                mediaPlayer.stop();
+                //mediaPlayer.pause();
+                ///mediaPlayer.stop();
                 Intent intent = new Intent(getApplicationContext(), ScreenOne.class);
                 intent.putExtra("ad", ad);
                 startActivity(intent);
@@ -124,21 +121,27 @@ public class CongratuationsActivity extends AppCompatActivity {
 
 
                 if (one) {
-                    wwe_image.setImageResource(R.drawable.wwe_then);
+                    wwe_image.setImageResource(R.drawable.third);
                     two = true;
                     one = false;
 
                 } else if (two) {
-                    Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.wwe_now);
+                    Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.first);
                     wwe_image.setImageBitmap(bMap);
                     two = false;
                     three = true;
 
                 } else if (three) {
-                    Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.wwe_forever);
+                    Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.second);
+                    wwe_image.setImageBitmap(bMap);
+                    four = true;
+                    three = false;
+
+                } else if (four) {
+                    Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.fourth);
                     wwe_image.setImageBitmap(bMap);
                     one = true;
-                    three = false;
+                    four = false;
 
                 }
                 String nextColor = ""; // Next background color;

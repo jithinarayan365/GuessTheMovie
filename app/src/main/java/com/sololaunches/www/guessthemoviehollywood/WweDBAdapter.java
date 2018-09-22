@@ -62,7 +62,7 @@ public class WweDBAdapter extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("PLAYER_NAME", playerName);
-        values.put("COINS", 50);
+        values.put("COINS", 10);
         values.put("POINTS", 0);
         values.put("STATUS", "N");
         db.insert("WWE_PLAYER_STAT", null, values);

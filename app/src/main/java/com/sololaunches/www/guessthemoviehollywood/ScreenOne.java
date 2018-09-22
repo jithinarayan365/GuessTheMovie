@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -25,6 +24,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sololaunches.www.guessthemoviehollywood.PlayerStatsBean;
+import com.sololaunches.www.guessthemoviehollywood.WweConvenience;
+import com.sololaunches.www.guessthemoviehollywood.WweDBAdapter;
+import com.sololaunches.www.guessthemoviehollywood.WweMainBean;
 import com.startapp.android.publish.adsCommon.StartAppAd;
 import com.startapp.android.publish.adsCommon.StartAppSDK;
 import com.startapp.android.publish.adsCommon.VideoListener;
@@ -47,8 +50,8 @@ public class ScreenOne extends AppCompatActivity {
     TextView congrats, level, coinStats, trivia;
     WweMainBean beanUnsolved;
     PlayerStatsBean playerStatsBean, playerStatsBean2;
-    int coins;
-    boolean videoAd;
+    boolean interstitial, videoAd;
+    private StartAppAd startAppAdInst;
     private StartAppAd startAppAd;
     private boolean exit = false;
 
@@ -94,7 +97,10 @@ public class ScreenOne extends AppCompatActivity {
         // insert here your instructions
         if (mediaPlayer != null) {
             playBtn.setImageResource(R.drawable.pause_new);
-            mediaPlayer.pause();
+            if(mediaPlayer.isPlaying())
+                mediaPlayer.stop();
+            mediaPlayer.reset();//It requires again setDataSource for player object.
+            mediaPlayer.release();
 
         }
 
@@ -105,339 +111,340 @@ public class ScreenOne extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Make to run your application only in portrait mode
+        StartAppSDK.init(this, "203580885", false);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setContentView(R.layout.activity_screen_one);
-
-        // widgets
-        trivia = (TextView) findViewById(R.id.trivia);
-        textVal = (EditText) findViewById(R.id.textView);
-        congrats = (TextView) findViewById(R.id.congrats);
-        level = (TextView) findViewById(R.id.level_txt);
-        coinStats = (TextView) findViewById(R.id.coin_txt);
-        nxt_btn = (ImageButton) findViewById(R.id.nxt_btn);
-        resolve = (ImageButton) findViewById(R.id.resolve);
-        add_Coins = (ImageButton) findViewById(R.id.add_Coins);
-        share = (ImageButton) findViewById(R.id.share);
-        playBtn = (ImageButton) findViewById(R.id.play);
-        textVal.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
-
-
-        add_Coins.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StartAppSDK.init(getApplicationContext(), "203580885", false);
-                ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                // ARE WE CONNECTED TO THE NET
-                if (conMgr.getActiveNetworkInfo() != null
-                        && conMgr.getActiveNetworkInfo().isAvailable()
-                        && conMgr.getActiveNetworkInfo().isConnected()) {
-                    startAppAd.showAd();
-
-                } else {
-                    Snackbar mySnackbar = Snackbar.make(v, "Make sure you have an active internet connection!", 5000);
-                    mySnackbar.show();
-                }
-            }
-        });
-        seekbar = (SeekBar) findViewById(R.id.seekBar);
-
-
-        // startApp
-        startAppAd = new StartAppAd(this);
-        startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO);
-        imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        wweDBAdapter = new WweDBAdapter(this, null, null, 1);
-        wweConvenience = new WweConvenience();
-        playerStatsBean = wweConvenience.getPlayerStats(getApplicationContext());
-        Cursor cur2 = wweDBAdapter.getTimeTableForStation();
-        PACKAGE_NAME = getApplicationContext().getPackageName();
-
-
-        if (cur2.getCount() == 0) {
-            return;
-        }
-
-        beanUnsolved = new WweMainBean();
-        while (cur2.moveToNext()) {
-            beanUnsolved.setPosition(cur2.getString(0));
-            beanUnsolved.setPlayer(cur2.getString(1));
-            beanUnsolved.setAlias(cur2.getString(2));
-            beanUnsolved.setPath(cur2.getString(3));
-            beanUnsolved.setDisplay(cur2.getString(4));
-            beanUnsolved.setHint(cur2.getString(5));
-            beanUnsolved.setHintStatus(cur2.getString(6));
-            beanUnsolved.setAdStatus(cur2.getString(7));
-            beanUnsolved.setStatus(cur2.getString(8));
-            beanUnsolved.setTrivia(cur2.getString(9));
-        }
-
-        songID = getResources().getIdentifier(PACKAGE_NAME + ":raw/" + beanUnsolved.getPlayer(), null, null);
-        mediaLoad();
-
-        startAppAd.setVideoListener(new VideoListener() {
-            @Override
-            public void onVideoCompleted() {
-                playerStatsBean2 = wweDBAdapter.getPlayerStats();
-                int coins = Integer.parseInt(playerStatsBean2.getCoins()) + 50;
-                playerStatsBean2.setCoins(String.valueOf(coins));
-                playerStatsBean.setCoins(String.valueOf(coins));
-                coinStats.setText(playerStatsBean2.getCoins());
-                wweDBAdapter.updateAddedCoins(playerStatsBean2);
-            }
-        });
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-
-        textVal.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        trivia.setVisibility(View.INVISIBLE);
-        congrats.setVisibility(View.INVISIBLE);
-        coinStats.setText(playerStatsBean.getCoins());
-        nxt_btn.setVisibility(View.INVISIBLE);
-        level.setText("Level -" + beanUnsolved.getPosition());
-
-        handler = new Handler();
-
         try {
+            // widgets
+            trivia = (TextView) findViewById(R.id.trivia);
+            textVal = (EditText) findViewById(R.id.textView);
+            congrats = (TextView) findViewById(R.id.congrats);
+            level = (TextView) findViewById(R.id.level_txt);
+            coinStats = (TextView) findViewById(R.id.coin_txt);
+            nxt_btn = (ImageButton) findViewById(R.id.nxt_btn);
+            resolve = (ImageButton) findViewById(R.id.resolve);
+            add_Coins = (ImageButton) findViewById(R.id.add_Coins);
+            share = (ImageButton) findViewById(R.id.share);
+            playBtn = (ImageButton) findViewById(R.id.play);
+            textVal.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+
+            startAppAd = new StartAppAd(this);
+            startAppAd.loadAd(StartAppAd.AdMode.REWARDED_VIDEO);
+
+            add_Coins.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    // ARE WE CONNECTED TO THE NET
+                    if (conMgr.getActiveNetworkInfo() != null
+                            && conMgr.getActiveNetworkInfo().isAvailable()
+                            && conMgr.getActiveNetworkInfo().isConnected()) {
+                        startAppAd.showAd();
+
+                    } else {
+                        Snackbar mySnackbar = Snackbar.make(v, "Make sure you have an active internet connection!", 2000);
+                        mySnackbar.show();
+                    }
+                }
+            });
+            seekbar = (SeekBar) findViewById(R.id.seekBar);
+
+
+            // startApp
+
+            //startAppAdInst = new StartAppAd(this);
+
+
+            imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            wweDBAdapter = new WweDBAdapter(this, null, null, 1);
+            wweConvenience = new WweConvenience();
+            playerStatsBean = wweConvenience.getPlayerStats(getApplicationContext());
+            Cursor cur2 = wweDBAdapter.getTimeTableForStation();
+            PACKAGE_NAME = getApplicationContext().getPackageName();
+
+
+            if (cur2.getCount() == 0) {
+                return;
+            }
+
+            beanUnsolved = new WweMainBean();
+            while (cur2.moveToNext()) {
+                beanUnsolved.setPosition(cur2.getString(0));
+                beanUnsolved.setPlayer(cur2.getString(1));
+                beanUnsolved.setAlias(cur2.getString(2));
+                beanUnsolved.setPath(cur2.getString(3));
+                beanUnsolved.setDisplay(cur2.getString(4));
+                beanUnsolved.setHint(cur2.getString(5));
+                beanUnsolved.setHintStatus(cur2.getString(6));
+                beanUnsolved.setAdStatus(cur2.getString(7));
+                beanUnsolved.setStatus(cur2.getString(8));
+                beanUnsolved.setTrivia(cur2.getString(9));
+            }
+
+            songID = getResources().getIdentifier(PACKAGE_NAME + ":raw/" + beanUnsolved.getPlayer(), null, null);
+            mediaLoad();
+
+            startAppAd.setVideoListener(new VideoListener() {
+                @Override
+                public void onVideoCompleted() {
+                    playerStatsBean2 = wweDBAdapter.getPlayerStats();
+                    int coins = Integer.parseInt(playerStatsBean2.getCoins()) + 50;
+                    playerStatsBean2.setCoins(String.valueOf(coins));
+                    playerStatsBean.setCoins(String.valueOf(coins));
+                    coinStats.setText(playerStatsBean2.getCoins());
+                    wweDBAdapter.updateAddedCoins(playerStatsBean2);
+                }
+            });
+
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.hide();
+
+            textVal.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+            trivia.setVisibility(View.INVISIBLE);
+            congrats.setVisibility(View.INVISIBLE);
+            if (playerStatsBean.getCoins() != null) {
+                coinStats.setText(playerStatsBean.getCoins());
+            }
+            nxt_btn.setVisibility(View.INVISIBLE);
+            level.setText("Level -" + beanUnsolved.getPosition());
+
+            handler = new Handler();
+
+            seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean input) {
+                    if (input) {
+                        mediaPlayer.seekTo(progress);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    if (mediaPlayer != null) {
+                    if (mediaPlayer != null && seekbar != null) {
                         seekbar.setMax(mediaPlayer.getDuration());
                         playCycle();
                     }
                 }
             });
-        } catch (Exception e) {
 
-            if (Build.VERSION.SDK_INT >= 11) {
-                recreate();
-            } else {
-                Intent intent = getIntent();
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-            }
-        }
-
-        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean input) {
-                if (input) {
-                    mediaPlayer.seekTo(progress);
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    String sub = "WWE guess the theme song ";
+                    String body = "Download -'guess the WWE theme song'  app from playstore from the link " + "http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName();
+                    intent.putExtra(Intent.EXTRA_SUBJECT, sub);
+                    intent.putExtra(Intent.EXTRA_TEXT, body);
+                    startActivity(Intent.createChooser(intent, " CHOOSE USING "));
                 }
-            }
+            });
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            playBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mediaPlayer == null) {
+                        mediaLoad(getApplicationContext());
+                    }
 
-            }
+                   // if (!mediaPlayer.isPlaying()) {
+                        if (!playFlag) {
+                            playBtn.setImageResource(R.drawable.pause_new);
+                            mediaPlayer.start();
+                            seekbar.setProgress(0);
+                            playCycle();
+                            playFlag = true;
+                            pauseFlag = false;
+                        } else if (!pauseFlag) {
+                            mediaPlayer.pause();
+                            playBtn.setImageResource(R.drawable.play_new);
+                            pauseFlag = true;
+                            playFlag = false;
+                        }
+                    }
+              //  }
+            });
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
 
-            }
-        });
-
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                String sub = "WWE guess the theme song ";
-                String body = "Download -'guess the WWE theme song'  app from playstore from the link " + "http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName();
-                intent.putExtra(Intent.EXTRA_SUBJECT, sub);
-                intent.putExtra(Intent.EXTRA_TEXT, body);
-                startActivity(Intent.createChooser(intent, " CHOOSE USING "));
-            }
-        });
-
-        playBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mediaPlayer == null) {
-                    mediaLoad(getApplicationContext());
+            textVal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                 }
+            });
 
-                if (!playFlag) {
-                    playBtn.setImageResource(R.drawable.pause_new);
-                    mediaPlayer.start();
-                    seekbar.setProgress(0);
-                    playCycle();
-                    playFlag = true;
-                    pauseFlag = false;
-                } else if (!pauseFlag) {
+
+
+            resolve.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Integer.parseInt(playerStatsBean.getCoins()) < 50) {
+                        Snackbar mySnackbar = Snackbar.make(v, "You dont have enough Coins, Click on add Coins to add few coins", 2000);
+                        mySnackbar.show();
+                    } else {
+                        mediaPlayer.stop();
+                        Intent intent = new Intent(getApplicationContext(), ResolveActivity.class);
+                        intent.putExtra("image", beanUnsolved.getPlayer());
+                        intent.putExtra("player", beanUnsolved.getDisplay());
+                        intent.putExtra("finalstat", beanUnsolved.getAdStatus());
+                        intent.putExtra("trivia", beanUnsolved.getTrivia());
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            });
+
+
+            hints = (ImageButton) findViewById(R.id.hints);
+            hints.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    WweMainBean mainBean = wweConvenience.getSuperStarBean(beanUnsolved.getPlayer());
+                    if (beanUnsolved.getHintStatus().equalsIgnoreCase("Y")) {
+                        Snackbar mySnackbar = Snackbar.make(v, mainBean.getHint(), 10000);
+                        mySnackbar.show();
+                    } else if (Integer.parseInt(playerStatsBean.getCoins()) < 40) {
+                        Snackbar mySnackbar = Snackbar.make(v, "You dont have Enough Coins, watch an AD to add Coins", 2000);
+                        mySnackbar.show();
+                    } else {
+                        int coins = Integer.parseInt(playerStatsBean.getCoins()) - 40;
+                        playerStatsBean.setCoins(String.valueOf(coins));
+                        beanUnsolved.setHintStatus("Y");
+                        wweDBAdapter.updateHintUsed(playerStatsBean, mainBean.getPlayer());
+                        coinStats.setText(playerStatsBean.getCoins());
+                        Snackbar mySnackbar = Snackbar.make(v, mainBean.getHint(), 10000);
+                        mySnackbar.show();
+                    }
+
+                }
+            });
+
+            nxt_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     mediaPlayer.pause();
-                    playBtn.setImageResource(R.drawable.play_new);
-                    pauseFlag = true;
-                    playFlag = false;
-                }
-            }
-        });
-
-
-        textVal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-            }
-        });
-
-        coins = Integer.parseInt(playerStatsBean.getCoins());
-
-        resolve.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (coins < 50) {
-                    Snackbar mySnackbar = Snackbar.make(v, "You dont have enough Coins, Click on add Coins to add few coins", 2000);
-                    mySnackbar.show();
-                } else {
-                    mediaPlayer.stop();
-                    Intent intent = new Intent(getApplicationContext(), ResolveActivity.class);
-                    intent.putExtra("image", beanUnsolved.getPlayer());
-                    intent.putExtra("player", beanUnsolved.getDisplay());
-                    intent.putExtra("finalstat", beanUnsolved.getDisplay());
-                    intent.putExtra("trivia", beanUnsolved.getTrivia());
+                    Intent intent = new Intent(getApplicationContext(), CongratuationsActivity.class);
+                    intent.putExtra("coins", playerStatsBean.getCoins());
+                    intent.putExtra("points", playerStatsBean.getPoints());
+                    intent.putExtra("ad", beanUnsolved.getAdStatus());
                     startActivity(intent);
                     finish();
                 }
-            }
-        });
+            });
+
+            check = (ImageButton) findViewById(R.id.check);
+            check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+                    String player = textVal.getText().toString().trim();
+                    if ("".equals(player)) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Enter the Movie name", Toast.LENGTH_LONG);
+                        toast.show();
+                        return;
+                    } else {
+
+                        boolean val = wweConvenience.getResult(beanUnsolved.getPlayer(), player);
+                        boolean val2 = false;
+                        if (!val) {
+                            if (beanUnsolved.getAlias() != null && !("".equals(beanUnsolved.getAlias().trim()))) {
+                                val2 = wweConvenience.getResult(beanUnsolved.getAlias(), player);
+                            }
+                        }
+
+                        if (val || val2) {
+                            nxt_btn.setVisibility(View.VISIBLE);
+                            ImageView superstar = (ImageView) findViewById(R.id.super_star);
+                            int imgId = getResources().getIdentifier(PACKAGE_NAME + ":drawable/" + beanUnsolved.getPlayer(), null, null);
+                            superstar.setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
+                            congrats.setVisibility(View.VISIBLE);
+                            congrats.setText(beanUnsolved.getDisplay());
+                            playBtn.setVisibility(View.INVISIBLE);
+                            check.setVisibility(View.INVISIBLE);
+                            seekbar.setVisibility(View.INVISIBLE);
+                            hints.setVisibility(View.INVISIBLE);
+                            resolve.setVisibility(View.INVISIBLE);
+                            Snackbar mySnackbar = Snackbar.make(v, "Congratulations, Correct answer", 5000);
+                            mySnackbar.show();
+                            trivia.setVisibility(View.VISIBLE);
+                            trivia.setText(beanUnsolved.getTrivia());
+                            imm.hideSoftInputFromWindow(textVal.getWindowToken(), 0);
+                            textVal.setVisibility(View.INVISIBLE);
+                            int coins = Integer.parseInt(playerStatsBean.getCoins()) + 5;
+                            int points = Integer.parseInt(playerStatsBean.getPoints()) + 100;
+                            playerStatsBean.setPoints(String.valueOf(points));
+                            playerStatsBean.setCoins(String.valueOf(coins));
+                            wweDBAdapter.updateStateUp(playerStatsBean, beanUnsolved.getPlayer());
 
 
-        hints = (ImageButton) findViewById(R.id.hints);
-        hints.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                            Runnable r = new Runnable() {
+                                @Override
+                                public void run() {
 
-                WweMainBean mainBean = wweConvenience.getSuperStarBean(beanUnsolved.getPlayer());
-                if (beanUnsolved.getHintStatus().equalsIgnoreCase("Y")) {
-                    Snackbar mySnackbar = Snackbar.make(v, mainBean.getHint(), 10000);
-                    mySnackbar.show();
-                } else if (Integer.parseInt(playerStatsBean.getCoins()) < 40) {
-                    Snackbar mySnackbar = Snackbar.make(v, "You dont have Enough Coins, watch an AD to add Coins", 2000);
-                    mySnackbar.show();
-                } else {
-                    int coins = Integer.parseInt(playerStatsBean.getCoins()) - 40;
-                    playerStatsBean.setCoins(String.valueOf(coins));
-                    beanUnsolved.setHintStatus("Y");
-                    wweDBAdapter.updateHintUsed(playerStatsBean, mainBean.getPlayer());
-                    coinStats.setText(playerStatsBean.getCoins());
-                    Snackbar mySnackbar = Snackbar.make(v, mainBean.getHint(), 10000);
-                    mySnackbar.show();
-                }
+                                    if (beanUnsolved.getAdStatus().equals("F")) {
+                                        wweDBAdapter.updateFinishGame(playerStatsBean.getPlayer());
+                                        Intent intent1 = new Intent(getApplicationContext(), Certificate.class);
+                                        intent1.putExtra("points", playerStatsBean.getPoints());
+                                        intent1.putExtra("player", playerStatsBean.getPlayer());
+                                        startActivity(intent1);
+                                        finish();
+                                    } else {
+                                        /*
+                                        if (interstitial) {
+                                            startAppAdInst.showAd();
+                                        } else if (videoAd) {
+                                            startAppAd.showAd();
+                                        }
+                                        */
+                                    }
+                                }
+                            };
+                            Handler h = new Handler();
+                            h.postDelayed(r, 2500);
 
-
-            }
-        });
-
-        nxt_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-                handler.removeCallbacks(runnable);
-                Intent intent = new Intent(getApplicationContext(), CongratuationsActivity.class);
-                intent.putExtra("points", playerStatsBean.getPoints());
-                intent.putExtra("coins", playerStatsBean.getCoins());
-                intent.putExtra("ad", beanUnsolved.getAdStatus());
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        check = (ImageButton) findViewById(R.id.check);
-        check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-                String player = textVal.getText().toString().trim();
-                if ("".equals(player)) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Enter the players name", Toast.LENGTH_LONG);
-                    toast.show();
-                    return;
-                } else {
-
-                    boolean val = wweConvenience.getResult(beanUnsolved.getPlayer(), player);
-                    boolean val2 = false;
-                    if (!val) {
-                        if (beanUnsolved.getAlias() != null && !("".equals(beanUnsolved.getAlias().trim()))) {
-                            val2 = wweConvenience.getResult(beanUnsolved.getAlias(), player);
+                        } else {
+                            imm.hideSoftInputFromWindow(textVal.getWindowToken(), 0);
+                            textVal.setText("");
+                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                            textVal.clearFocus();
+                            Snackbar mySnackbar = Snackbar.make(v, "Wrong Answer", 5000);
+                            mySnackbar.show();
                         }
                     }
 
-                    if (val || val2) {
-                        nxt_btn.setVisibility(View.VISIBLE);
-                        ImageView superstar = (ImageView) findViewById(R.id.super_star);
-                        int imgId = getResources().getIdentifier(PACKAGE_NAME + ":drawable/" + beanUnsolved.getPlayer(), null, null);
-                        superstar.setImageBitmap(BitmapFactory.decodeResource(getResources(), imgId));
-                        congrats.setVisibility(View.VISIBLE);
-                        congrats.setText(beanUnsolved.getDisplay());
-                        playBtn.setVisibility(View.INVISIBLE);
-                        check.setVisibility(View.INVISIBLE);
-                        seekbar.setVisibility(View.INVISIBLE);
-                        hints.setVisibility(View.INVISIBLE);
-                        resolve.setVisibility(View.INVISIBLE);
-                        Snackbar mySnackbar = Snackbar.make(v, "Congratulations, Correct answer", 5000);
-                        mySnackbar.show();
-                        trivia.setVisibility(View.VISIBLE);
-                        trivia.setText(beanUnsolved.getTrivia());
-                        imm.hideSoftInputFromWindow(textVal.getWindowToken(), 0);
-                        textVal.setVisibility(View.INVISIBLE);
-                        int coins = Integer.parseInt(playerStatsBean.getCoins()) + 5;
-                        int points = Integer.parseInt(playerStatsBean.getPoints()) + 100;
-                        playerStatsBean.setPoints(String.valueOf(points));
-                        playerStatsBean.setCoins(String.valueOf(coins));
-                        wweDBAdapter.updateStateUp(playerStatsBean, beanUnsolved.getPlayer());
-
-
-                        Runnable r = new Runnable() {
-                            @Override
-                            public void run() {
-
-                                if (beanUnsolved.getAdStatus().equals("F")) {
-                                    wweDBAdapter.updateFinishGame(playerStatsBean.getPlayer());
-                                    Intent intent1 = new Intent(getApplicationContext(), Certificate.class);
-                                    intent1.putExtra("points", playerStatsBean.getPoints());
-                                    intent1.putExtra("player", playerStatsBean.getPlayer());
-                                    startActivity(intent1);
-                                    finish();
-                                }
-                            }
-                        };
-                        Handler h = new Handler();
-                        h.postDelayed(r, 2500);
-
-                    } else {
-                        imm.hideSoftInputFromWindow(textVal.getWindowToken(), 0);
-                        textVal.setText("");
-                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                        textVal.clearFocus();
-                        Snackbar mySnackbar = Snackbar.make(v, "Wrong Answer", 5000);
-                        mySnackbar.show();
-                    }
                 }
-
-            }
-        });
-
+            });
+        } catch (Exception e) {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
     }
 
     private void mediaLoad() {
-        // mediaPlayer = MediaPlayer.create(this, songID);
         mediaPlayer = MediaPlayer.create(this, songID);
-
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
     private void mediaLoad(Context ctxt) {
-        mediaPlayer = MediaPlayer.create(ctxt, songID);
+        mediaPlayer = MediaPlayer.create(this, songID);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
     }
 
@@ -466,10 +473,15 @@ public class ScreenOne extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer != null) {
+        /*
+        if(mediaPlayer!= null){
+        if (mediaPlayer.isPlaying()) {
             mediaPlayer.release();
-        }
-        handler.removeCallbacks(runnable);
+            handler.removeCallbacks(runnable);
+            mediaPlayer = null;
+        }}
+        */
+        //handler.removeCallbacks(runnable);
         Runtime.getRuntime().gc();
 
     }

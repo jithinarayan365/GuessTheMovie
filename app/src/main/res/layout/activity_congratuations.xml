@@ -43,15 +43,6 @@
         android:layout_marginRight="34dp"
         app:srcCompat="@drawable/next_btn" />
 
-    <ImageView
-        android:id="@+id/wwe_image"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="97dp"
-        app:srcCompat="@drawable/wwe_then" />
-
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -63,4 +54,13 @@
         android:text="well done! click next"
         android:textColor="@android:color/background_light"
         android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/wwe_image"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_marginTop="74dp"
+        app:srcCompat="@drawable/third" />
 </RelativeLayout>
